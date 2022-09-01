@@ -128,7 +128,6 @@ const main = async ({ isTypeScript, packageManager, rootDirectory }) => {
   const FILE_EXTENSION = isTypeScript ? "ts" : "js";
 
   const README_PATH = path.join(rootDirectory, "README.md");
-  const FLY_TOML_PATH = path.join(rootDirectory, "fly.toml");
   const EXAMPLE_ENV_PATH = path.join(rootDirectory, ".env.example");
   const ENV_PATH = path.join(rootDirectory, ".env");
   const DEPLOY_WORKFLOW_PATH = path.join(
@@ -177,7 +176,6 @@ const main = async ({ isTypeScript, packageManager, rootDirectory }) => {
     vitestConfig,
     packageJson,
   ] = await Promise.all([
-    fs.readFile(FLY_TOML_PATH, "utf-8"),
     fs.readFile(README_PATH, "utf-8"),
     fs.readFile(EXAMPLE_ENV_PATH, "utf-8"),
     fs.readFile(DOCKERFILE_PATH, "utf-8"),
@@ -214,7 +212,6 @@ const main = async ({ isTypeScript, packageManager, rootDirectory }) => {
   updatePackageJson({ APP_NAME, isTypeScript, packageJson });
 
   const fileOperationPromises = [
-    fs.writeFile(FLY_TOML_PATH, toml.stringify(prodToml)),
     fs.writeFile(README_PATH, newReadme),
     fs.writeFile(ENV_PATH, newEnv),
     fs.writeFile(DOCKERFILE_PATH, newDockerfile),
