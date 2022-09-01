@@ -6,7 +6,7 @@
     "build": "run-s build:*",
     "build:css": "npm run generate:css -- --minify",
     "build:remix": "remix build",
-    "build:server": "esbuild --platform=node --format=cjs ./server.ts --outdir=build --bundle",
+    "build:server": "esbuild --platform=node --external:pg-native --format=cjs ./server.ts --outdir=build --bundle",
     "dev": "run-p dev:*",
     "dev:build": "cross-env NODE_ENV=development npm run build:server -- --watch",
     "dev:css": "cross-env NODE_ENV=development npm run generate:css -- --watch",
@@ -44,9 +44,13 @@
     "express": "^4.18.1",
     "isbot": "^3.5.1",
     "morgan": "^1.10.0",
+    "pg-boss": "^8.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "tiny-invariant": "^1.2.0"
+    "remix-auth": "^3.2.2",
+    "remix-auth-form": "^1.1.2",
+    "tiny-invariant": "^1.2.0",
+    "zod": "^3.18.0"
   },
   "devDependencies": {
     "@faker-js/faker": "^7.4.0",

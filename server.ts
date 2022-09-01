@@ -3,6 +3,11 @@ import express from "express";
 import compression from "compression";
 import morgan from "morgan";
 import { createRequestHandler } from "@remix-run/express";
+import jobs from './server/jobs'
+
+(async() => {
+  await jobs.init();
+})();
 
 const app = express();
 
