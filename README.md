@@ -1,11 +1,11 @@
-# Remix Blues Stack
+# Remix Ska Stack
 
-![The Remix Blues Stack](https://repository-images.githubusercontent.com/461012689/37d5bd8b-fa9c-4ab0-893c-f0a199d5012d)
+![The Remix Ska Stack](https://user-images.githubusercontent.com/6237350/187943170-b42c2764-1a3c-4129-a35b-ea1cbe9ff4cf.png)
 
 Learn more about [Remix Stacks](https://remix.run/stacks).
 
 ```
-npx create-remix --template remix-run/blues-stack
+export npm_config_user_agent=yarn && npx create-remix --template mejjjor/ska-stack
 ```
 
 ## What's in the stack
