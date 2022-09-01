@@ -3,11 +3,22 @@ services:
   postgres:
     image: postgres:latest
     restart: always
+    env_file:
+      - .env
     environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=postgres
+      POSTGRES_USER: ${POSTGRESQL_ADDON_USER}
+      POSTGRES_PASSWORD: ${POSTGRESQL_ADDON_PASSWORD}
+      POSTGRES_DB: ${POSTGRESQL_ADDON_DB}
+
     ports:
-      - "5432:5432"
+      - ${POSTGRESQL_ADDON_PORT}:5432
     volumes:
-      - ./postgres-data:/var/lib/postgresql/data
+      - postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: 'pg_isready -U ${POSTGRESQL_ADDON_USER}'
+      interval: 3s
+      timeout: 1s
+      retries: 5
+
+volumes:
+  postgres:

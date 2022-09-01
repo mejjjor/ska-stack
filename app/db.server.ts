@@ -21,10 +21,10 @@ if (process.env.NODE_ENV === "production") {
 }
 
 function getClient() {
-  const { DATABASE_URL } = process.env;
-  invariant(typeof DATABASE_URL === "string", "DATABASE_URL env var not set");
+  const { POSTGRESQL_ADDON_URI } = process.env;
+  invariant(typeof POSTGRESQL_ADDON_URI === "string", "POSTGRESQL_ADDON_URI env var not set");
 
-  const databaseUrl = new URL(DATABASE_URL);
+  const databaseUrl = new URL(POSTGRESQL_ADDON_URI);
 
   console.log(`🔌 setting up prisma client to ${databaseUrl.host}`);
   // NOTE: during development if you change anything in this function, remember
