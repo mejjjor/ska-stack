@@ -14,7 +14,10 @@ prisma = global.__db__;
 
 function getClient() {
   const { POSTGRESQL_ADDON_URI } = process.env;
-  invariant(typeof POSTGRESQL_ADDON_URI === "string", "POSTGRESQL_ADDON_URI env var not set");
+  invariant(
+    typeof POSTGRESQL_ADDON_URI === "string",
+    "POSTGRESQL_ADDON_URI env var not set"
+  );
 
   const databaseUrl = new URL(POSTGRESQL_ADDON_URI);
 
