@@ -2,7 +2,7 @@ import { renderToString } from "react-dom/server";
 import { RemixServer } from "@remix-run/react";
 import type { EntryContext } from "@remix-run/node";
 import { injectStyles, createStylesServer } from "@mantine/remix";
-import { getContentSecurityPolicy } from "./utils/misc";
+import { getContentSecurityPolicy } from "~/utils/csp";
 
 const server = createStylesServer();
 
