@@ -3,7 +3,7 @@ import { FormStrategy } from "remix-auth-form";
 import bcrypt from "bcryptjs";
 import { v4 as uuidv4 } from "uuid";
 
-import { prisma } from "app/services/prisma.server";
+import { prisma } from "~/db.server";
 import {
   getSessionStorage,
   setSessionStorage,

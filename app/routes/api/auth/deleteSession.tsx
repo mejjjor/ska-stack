@@ -1,7 +1,7 @@
 import { json, redirect } from "@remix-run/node";
 
 import { isAuthenticated } from "~/services/auth.server";
-import { prisma } from "~/services/prisma.server";
+import { prisma } from "~/db.server";
 
 import type { ActionFunction } from "@remix-run/node";
 
