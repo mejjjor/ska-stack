@@ -1,4 +1,4 @@
-import type { LoaderArgs, LoaderFunction, MetaFunction } from "@remix-run/node";
+import type { LoaderFunction, MetaFunction } from "@remix-run/node";
 import {
   Links,
   LiveReload,
@@ -11,7 +11,6 @@ import {
 import { MantineProvider, createEmotionCache } from "@mantine/core";
 import { StylesPlaceholder } from "@mantine/remix";
 import { generateHash } from "~/utils/misc";
-import { isAuthenticated } from "~/services/auth.server";
 
 export const meta: MetaFunction = () => ({
   charset: "utf-8",
@@ -25,12 +24,9 @@ const theme = {
 
 const myCache = createEmotionCache({ key: "mantine" });
 
-export const loader: LoaderFunction = async ({ request }: LoaderArgs) => {
-  const tokenData = await isAuthenticated(request);
-
+export const loader: LoaderFunction = async () => {
   return {
     cspNonce: generateHash(42),
-    tokenData,
   };
 };
 

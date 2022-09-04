@@ -53,6 +53,7 @@
     "remix-auth": "^3.2.2",
     "remix-auth-form": "^1.1.2",
     "remix-utils": "^3.3.0",
+    "superjson": "^1.9.1",
     "tiny-invariant": "^1.2.0",
     "uuid": "^8.3.2",
     "zod": "^3.18.0"

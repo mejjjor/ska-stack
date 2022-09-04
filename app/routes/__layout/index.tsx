@@ -9,14 +9,22 @@ import {
   Group,
   Anchor,
 } from "@mantine/core";
-import { Link } from "@remix-run/react";
+import { Link, useLoaderData } from "@remix-run/react";
+import type { LoaderArgs } from "@remix-run/server-runtime";
+import { json } from "@remix-run/server-runtime";
+import { isAuthenticated } from "~/services/auth.server";
 
-import { useOptionalUser } from "~/utils/auth";
 import links from "~/utils/links";
 import { hexToRgb } from "~/utils/misc";
 
+export const loader = async ({ request }: LoaderArgs) => {
+  const user = await isAuthenticated(request);
+  return json({ auth: user });
+};
+
 export default function Index() {
-  const user = useOptionalUser();
+  const { auth } = useLoaderData<typeof loader>();
+
   return (
     <Container size="xl">
       <Box pt="2rem">
@@ -92,14 +100,14 @@ export default function Index() {
             </Text>
 
             <Box mt="2rem">
-              {user ? (
+              {auth ? (
                 <Button
                   component={Link}
                   to={links.profile}
                   variant="filled"
                   size="lg"
                 >
-                  Profile for {user.email}
+                  Profile for {auth.email}
                 </Button>
               ) : (
                 <Group>

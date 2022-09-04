@@ -3,7 +3,7 @@ import type { ActionArgs, LoaderArgs, MetaFunction } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { Form, useActionData } from "@remix-run/react";
 import { verifyLogin } from "~/models/user.server";
-import { validateEmail } from "~/utils";
+import { validateEmail } from "~/utils/misc";
 import {
   TextInput,
   PasswordInput,
@@ -27,7 +27,7 @@ import { env } from "~/utils/env.server";
 export async function loader({ request }: LoaderArgs) {
   const tokenData = await isAuthenticated(request);
   if (tokenData) {
-    return redirect("/");
+    return redirect(links.home);
   }
   return json({});
 }
@@ -70,6 +70,7 @@ export async function action({ request }: ActionArgs) {
       { status: 400 }
     );
   }
+
   setAuthenticator({ maxAge: remember ? undefined : env.SESSION_MAX_AGE });
   return await getAuthenticator().authenticate("user-pass", request, {
     successRedirect: links.profile,

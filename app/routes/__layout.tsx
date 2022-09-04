@@ -1,39 +1,36 @@
-import React from "react";
-import { Outlet, useLoaderData, useCatch } from "@remix-run/react";
-import { useLocation } from "react-router-dom";
+import { Outlet, useLoaderData, useCatch, useMatches } from "@remix-run/react";
 import Nav from "~/components/Nav";
 import links from "~/utils/links";
-import { useOptionalUser } from "~/utils/auth";
+import { isAuthenticated } from "~/services/auth.server";
+import type { LoaderArgs } from "@remix-run/server-runtime";
 
-// import { isAuthenticated } from '~/services/auth.server';
+export const loader = async ({ request }: LoaderArgs) => {
+  const user = await isAuthenticated(request);
 
-// export const loader = async({ request }) => {
-//   const user = await isAuthenticated(request);
-//   if (user) {
-//     return { isAuth: true };
-//   } else {
-//     return { isAuth: false };
-//   }
-// };
+  return { auth: user };
+};
 
 export default function Layout() {
-  //   const { isAuth } = useLoaderData();
+  const { auth } = useLoaderData<typeof loader>();
+  const data = useMatches();
 
-  //   const { pathname } = useLocation();
-  const user = useOptionalUser();
+  // force reload if __layout.tsx is auth but not first level in route
+  if (auth && data[2].data.hasOwnProperty("auth") && !data[2].data.auth) {
+    window.location.reload();
+  }
 
   const linksData = [
     { link: links.home, label: "Home" },
     { link: links.readme, label: "README.md" },
   ];
 
-  if (user) {
+  if (auth) {
     linksData.push({ link: links.profile, label: "Profile" });
   }
 
   return (
     <>
-      <Nav links={linksData} showLogout={!!user} />
+      <Nav links={linksData} showLogout={!!auth} />
       <main>
         <Outlet />
       </main>
@@ -55,13 +52,13 @@ export function CatchBoundary() {
   );
 }
 
-export function ErrorBoundary({ error }) {
-  return (
-    <div>
-      <h1>Error</h1>
-      <p>{error.message}</p>
-      <p>The stack trace is:</p>
-      <pre>{error.stack}</pre>
-    </div>
-  );
-}
+// export function ErrorBoundary({ error }) {
+//   return (
+//     <div>
+//       <h1>Error</h1>
+//       <p>{error.message}</p>
+//       <p>The stack trace is:</p>
+//       <pre>{error.stack}</pre>
+//     </div>
+//   );
+// }
