@@ -14,7 +14,9 @@ import { generateHash } from "~/utils/misc";
 
 export const meta: MetaFunction = () => ({
   charset: "utf-8",
-  title: "Remix boilerplate",
+  title: "Remix boilerplate ska stack",
+  description:
+    "ska stack with remix, clevercloud, mantine, prisma and many more",
   viewport: "width=device-width,initial-scale=1",
 });
 
