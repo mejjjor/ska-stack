@@ -46,7 +46,7 @@ export default function Index() {
             }}
           >
             <img
-              src="https://user-images.githubusercontent.com/6237350/188270696-0344d337-ccbe-4923-b51b-74a77781503f.jpg"
+              src="https://user-images.githubusercontent.com/6237350/188337040-09007ae0-9523-43c0-a19a-b1ca189a2d6a.jpg"
               alt="lee 'scratch' perry recording a song"
               style={{ width: "100%", height: "100%", objectFit: "cover" }}
             />

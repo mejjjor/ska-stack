@@ -29,3 +29,11 @@ export async function createSession(
     },
   });
 }
+
+export async function deleteSession(token: Session["token"]) {
+  return prisma.session.delete({
+    where: {
+      token,
+    },
+  });
+}
