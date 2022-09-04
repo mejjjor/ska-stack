@@ -11,13 +11,12 @@ import {
 } from "@mantine/core";
 import { Link } from "@remix-run/react";
 
-import { useOptionalUser } from "~/utils";
+import { useOptionalUser } from "~/utils/auth";
 import links from "~/utils/links";
 import { hexToRgb } from "~/utils/misc";
 
 export default function Index() {
   const user = useOptionalUser();
-
   return (
     <Container size="xl">
       <Box pt="2rem">
@@ -94,12 +93,22 @@ export default function Index() {
 
             <Box mt="2rem">
               {user ? (
-                <Button component={Link} to="/notes" variant="white" size="lg">
-                  View Notes for {user.email}
+                <Button
+                  component={Link}
+                  to={links.profile}
+                  variant="filled"
+                  size="lg"
+                >
+                  Profile for {user.email}
                 </Button>
               ) : (
                 <Group>
-                  <Button component={Link} to="/join" variant="white" size="lg">
+                  <Button
+                    component={Link}
+                    to={links.join}
+                    variant="white"
+                    size="lg"
+                  >
                     Sign up
                   </Button>
                   <Button component={Link} to="/login" size="lg">

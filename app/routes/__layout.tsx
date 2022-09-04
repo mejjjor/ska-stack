@@ -3,6 +3,7 @@ import { Outlet, useLoaderData, useCatch } from "@remix-run/react";
 import { useLocation } from "react-router-dom";
 import Nav from "~/components/Nav";
 import links from "~/utils/links";
+import { useOptionalUser } from "~/utils/auth";
 
 // import { isAuthenticated } from '~/services/auth.server';
 
@@ -19,15 +20,20 @@ export default function Layout() {
   //   const { isAuth } = useLoaderData();
 
   //   const { pathname } = useLocation();
+  const user = useOptionalUser();
+
+  const linksData = [
+    { link: links.home, label: "Home" },
+    { link: links.readme, label: "README.md" },
+  ];
+
+  if (user) {
+    linksData.push({ link: links.profile, label: "Profile" });
+  }
 
   return (
     <>
-      <Nav
-        links={[
-          { link: links.home, label: "Home" },
-          { link: links.readme, label: "README.md" },
-        ]}
-      />
+      <Nav links={linksData} showLogout={!!user} />
       <main>
         <Outlet />
       </main>

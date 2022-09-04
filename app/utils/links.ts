@@ -1,4 +1,6 @@
 export default {
   home: "/",
-  readme: "readme",
+  readme: "/readme",
+  join: "/join",
+  profile: "/profile",
 };

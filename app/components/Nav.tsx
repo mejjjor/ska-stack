@@ -6,8 +6,11 @@ import {
   Burger,
   Paper,
   Transition,
+  Button,
+  UnstyledButton,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
+import { Form } from "@remix-run/react";
 import NavLinkMantine from "./NavLink";
 
 const HEADER_HEIGHT = 60;
@@ -45,6 +48,7 @@ const useStyles = createStyles((theme) => ({
     [theme.fn.smallerThan("sm")]: {
       display: "none",
     },
+    width: "100%",
   },
 
   burger: {
@@ -91,13 +95,26 @@ const useStyles = createStyles((theme) => ({
       ),
     },
   },
+
+  formLogout: {
+    display: "block",
+  },
+  logout: {
+    width: "100%",
+    color: theme.fn.variant({ variant: "white", color: theme.primaryColor })
+      .color,
+  },
 }));
 
 interface HeaderResponsiveProps {
   links: { link: string; label: string }[];
+  showLogout: boolean;
 }
 
-export default function HeaderResponsive({ links }: HeaderResponsiveProps) {
+export default function HeaderResponsive({
+  links,
+  showLogout,
+}: HeaderResponsiveProps) {
   const [opened, { toggle, close }] = useDisclosure(false);
   const { classes, cx } = useStyles();
 
@@ -123,8 +140,15 @@ export default function HeaderResponsive({ links }: HeaderResponsiveProps) {
   return (
     <Header height={HEADER_HEIGHT} className={classes.root}>
       <Container className={classes.header} size="xl">
-        <Group spacing={5} className={classes.links}>
-          {items}
+        <Group position="apart" className={classes.links}>
+          <Group spacing={5}>{items}</Group>
+          {showLogout && (
+            <Form method="post" action="/api/auth/logout">
+              <Button variant="light" type="submit">
+                Logout
+              </Button>
+            </Form>
+          )}
         </Group>
 
         <Burger
@@ -139,6 +163,20 @@ export default function HeaderResponsive({ links }: HeaderResponsiveProps) {
           {(styles) => (
             <Paper className={classes.dropdown} withBorder style={styles}>
               {items}
+              {showLogout && (
+                <Form
+                  method="post"
+                  action="/api/auth/logout"
+                  className={cx(classes.formLogout)}
+                >
+                  <UnstyledButton
+                    className={cx(classes.link, classes.logout)}
+                    type="submit"
+                  >
+                    Logout
+                  </UnstyledButton>
+                </Form>
+              )}
             </Paper>
           )}
         </Transition>
