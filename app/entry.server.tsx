@@ -1,10 +1,11 @@
 import { renderToString } from "react-dom/server";
 import { RemixServer } from "@remix-run/react";
 import type { EntryContext } from "@remix-run/node";
+import { mantineCache } from "./mantineCache";
 import { injectStyles, createStylesServer } from "@mantine/remix";
 import { getContentSecurityPolicy } from "~/utils/csp";
 
-const server = createStylesServer();
+const server = createStylesServer(mantineCache);
 
 export default function handleRequest(
   request: Request,

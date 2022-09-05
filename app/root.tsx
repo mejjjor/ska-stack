@@ -8,7 +8,8 @@ import {
   ScrollRestoration,
   useLoaderData,
 } from "@remix-run/react";
-import { MantineProvider, createEmotionCache } from "@mantine/core";
+import { MantineProvider } from "@mantine/core";
+import { mantineCache } from "./mantineCache";
 import { StylesPlaceholder } from "@mantine/remix";
 import { generateHash } from "~/utils/misc";
 
@@ -24,8 +25,6 @@ const theme = {
   primaryColor: "violet",
 };
 
-const myCache = createEmotionCache({ key: "mantine" });
-
 export const loader: LoaderFunction = async () => {
   return {
     cspNonce: generateHash(42),
@@ -37,7 +36,7 @@ export default function App() {
 
   return (
     <MantineProvider
-      emotionCache={myCache}
+      emotionCache={mantineCache}
       theme={theme}
       withGlobalStyles
       withNormalizeCSS
@@ -51,7 +50,7 @@ export default function App() {
         <body style={{ height: "100%" }}>
           <Outlet />
           <ScrollRestoration nonce={cspNonce} />
-          <Scripts nonce={cspNonce} />
+          {/* <Scripts nonce={cspNonce} /> */}
           <LiveReload nonce={cspNonce} />
         </body>
       </html>
