@@ -1,4 +1,5 @@
 import type { LoaderFunction, MetaFunction } from "@remix-run/node";
+import { json } from "@remix-run/node";
 import {
   Links,
   LiveReload,
@@ -12,6 +13,11 @@ import { MantineProvider } from "@mantine/core";
 import { mantineCache } from "./mantineCache";
 import { StylesPlaceholder } from "@mantine/remix";
 import { generateHash } from "~/utils/misc";
+import {
+  AuthenticityTokenProvider,
+  createAuthenticityToken,
+} from "remix-utils";
+import { getSession, commitSession } from "~/services/csrf.server";
 
 export const meta: MetaFunction = () => ({
   charset: "utf-8",
@@ -25,14 +31,22 @@ const theme = {
   primaryColor: "violet",
 };
 
-export const loader: LoaderFunction = async () => {
-  return {
-    cspNonce: generateHash(42),
-  };
+export const loader: LoaderFunction = async ({ request }) => {
+  let session = await getSession(request.headers.get("cookie"));
+  let token = createAuthenticityToken(session);
+  return json(
+    {
+      csrf: token,
+      cspNonce: generateHash(42),
+    },
+    { headers: { "Set-Cookie": await commitSession(session) } }
+  );
 };
 
 export default function App() {
-  const { cspNonce } = useLoaderData<typeof loader>();
+  const { cspNonce, csrf } = useLoaderData<typeof loader>();
+  console.log("qssdsqdqsd", csrf);
+  console.log("cspNonce", cspNonce);
 
   return (
     <MantineProvider
@@ -48,9 +62,11 @@ export default function App() {
           <StylesPlaceholder />
         </head>
         <body style={{ height: "100%" }}>
-          <Outlet />
+          <AuthenticityTokenProvider token={csrf}>
+            <Outlet />
+          </AuthenticityTokenProvider>
           <ScrollRestoration nonce={cspNonce} />
-          {/* <Scripts nonce={cspNonce} /> */}
+          <Scripts nonce={cspNonce} />
           <LiveReload nonce={cspNonce} />
         </body>
       </html>

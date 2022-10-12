@@ -1,7 +1,7 @@
 import * as React from "react";
 import type { ActionArgs, LoaderArgs, MetaFunction } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
-import { Form, useActionData } from "@remix-run/react";
+import { Form, useActionData, useLoaderData } from "@remix-run/react";
 import { verifyLogin } from "~/models/user.server";
 import { validateEmail } from "~/utils/misc";
 import {
@@ -23,18 +23,23 @@ import {
 } from "~/services/auth.server";
 import links from "~/utils/links";
 import { env } from "~/utils/env.server";
+import { AuthenticityTokenInput, verifyAuthenticityToken } from "remix-utils";
+import { getSession } from "~/services/csrf.server";
 
 export async function loader({ request }: LoaderArgs) {
   const tokenData = await isAuthenticated(request);
   if (tokenData) {
     return redirect(links.home);
   }
-  return json({});
+  return json({ title: "Welcome back again" });
 }
 
-type ActionData = { errors: { email?: string; password?: string } };
+type ActionData = { errors: { email?: string; password?: string } } | undefined;
 
 export async function action({ request }: ActionArgs) {
+  let session = await getSession(request.clone().headers.get("Cookie"));
+  await verifyAuthenticityToken(request, session);
+
   const formData = await request.clone().formData();
   const email = formData.get("email");
   const password = formData.get("password");
@@ -84,8 +89,22 @@ export const meta: MetaFunction = () => {
   };
 };
 
-export default function Join() {
+export default () => {
   const actionData = useActionData<ActionData>();
+  const loaderData = useLoaderData<typeof loader>();
+  console.log("aaza", actionData);
+  console.log("loaderData", loaderData);
+
+  return Login({ actionData, loaderData });
+};
+
+export const Login = ({
+  actionData,
+  loaderData,
+}: {
+  actionData: ActionData | undefined;
+  loaderData: any;
+}) => {
   const emailRef = React.useRef<HTMLInputElement>(null);
   const passwordRef = React.useRef<HTMLInputElement>(null);
 
@@ -106,15 +125,16 @@ export default function Join() {
           fontWeight: 900,
         })}
       >
-        Welcome back !
+        {loaderData.title}
       </Title>
-      <Form method="post" autoComplete="off">
+      <Form method="post">
+        <AuthenticityTokenInput />
         <Paper withBorder shadow="md" p={30} mt={30} radius="md">
           <TextInput
             ref={emailRef}
             label="Email"
             placeholder="you@mantine.dev"
-            autoComplete="off"
+            autoComplete="on"
             autoFocus={true}
             name="email"
             aria-invalid={actionData?.errors?.email ? true : undefined}
@@ -153,4 +173,4 @@ export default function Join() {
       </Form>
     </Container>
   );
-}
+};

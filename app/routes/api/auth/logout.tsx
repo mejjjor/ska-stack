@@ -8,7 +8,6 @@ import { deleteSession } from "~/models/session.server";
 
 export const action: ActionFunction = async ({ request }) => {
   const user = await isAuthenticated(request);
-  console.log("user", user);
   if (user) {
     await deleteSession(user.token);
     return await getAuthenticator().logout(request, { redirectTo: links.home });
