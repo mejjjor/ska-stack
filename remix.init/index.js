@@ -193,6 +193,10 @@ const main = async ({ isTypeScript, packageManager, rootDirectory }) => {
       path.join(rootDirectory, "remix.init", "gitignore"),
       path.join(rootDirectory, ".gitignore")
     ),
+    fs.copyFile(
+      path.join(rootDirectory, "remix.init", ".gitlab-ci.yml"),
+      path.join(rootDirectory, ".gitlab-ci.yml")
+    ),
   ];
 
   if (!isTypeScript) {

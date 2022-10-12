@@ -1,0 +1,9 @@
+stages:
+  - github
+  - deploy
+
+deploy:
+  stage: github
+  image: node:14
+  script:
+    - git push https://$GITHUB_TOKEN@github.com/mejjjor/ska-stack.git HEAD:main --force

@@ -1,0 +1,27 @@
+stages:
+  - lint
+  - deploy
+
+
+es-lint:
+  stage: lint
+  image: node:14
+  interruptible: true
+  cache:
+    key: $CI_PROJECT_NAME
+    paths:
+      - node_modules/
+  script:
+    - yarn
+    - yarn lint
+
+clever-cloud:
+  stage: deploy
+  image: 
+    name: clevercloud/clever-tools:latest
+    entrypoint: ["/bin/sh", "-c"]
+  interruptible: true
+  script:
+    - clever deploy
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
