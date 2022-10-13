@@ -60,11 +60,12 @@ app.all(
 );
 
 const port = process.env.PORT || 3000;
+const host = process.env.HOST || "0.0.0.0";
 
 app.listen(port, () => {
   // require the built app so we're ready when the first request comes in
   require(BUILD_DIR);
-  console.log(`✅ app ready: http://localhost:${port}`);
+  console.log(`✅ app ready: http://${host}:${port}`);
 });
 
 function purgeRequireCache() {
